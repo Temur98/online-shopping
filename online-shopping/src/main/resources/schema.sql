@@ -5,5 +5,5 @@ create table products(
                          color varchar2(256),
                          brand varchar2(256),
                          imageFile varchar2(1024),
-                         price VARCHAR2(256)
+                         price NUMBER(256)
 );

@@ -3,6 +3,9 @@ package cantroller;
 import dto.ProductDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.ProductService;
@@ -19,9 +22,9 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<List<ProductDTO>> getProduct(
-                                                       @RequestParam Optional<String> brand,
-                                                       @RequestParam Optional<String> color,
-                                                       @RequestParam Optional<Double> price){
+            @RequestParam Optional<String> brand,
+            @RequestParam Optional<String> color,
+            @RequestParam Optional<Double> price){
         return ResponseEntity.ok(productService.getAllProducts(brand, color, price));
     }
 
@@ -44,5 +47,14 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ProductDTO> deleteProduct(@PathVariable Long id){
         return ResponseEntity.ok(productService.deleteProduct(id));
+    }
+
+    @PostMapping("/export")
+    public ResponseEntity<byte[]> exportProductsToPDF(@RequestBody List<Long> productIds) {
+        byte[] pdfBytes = productService.exportProductsToPDF(productIds);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "products.pdf");
+        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
 }

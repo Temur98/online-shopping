@@ -4,7 +4,7 @@ import dto.ProductDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mapper.ProductMapper;
-import model.Product;
+import entity.Product;
 import org.springframework.stereotype.Service;
 import repository.ProductRepository;
 
@@ -83,5 +83,10 @@ public class ProductService {
         );
         productRepository.delete(product);
         return productMapper.toDTO(product);
+    }
+
+    public byte[] exportProductsToPDF(List<Long> productIds) {
+        List<Product> products = productRepository.findAllById(productIds);
+        return PdfExportUtil.exportProductsToPDF(products);
     }
 }

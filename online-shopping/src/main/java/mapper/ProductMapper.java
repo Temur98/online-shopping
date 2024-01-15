@@ -2,7 +2,7 @@ package mapper;
 
 import dto.ProductDTO;
 import lombok.RequiredArgsConstructor;
-import model.Product;
+import entity.Product;
 import org.springframework.stereotype.Component;
 
 @Component
